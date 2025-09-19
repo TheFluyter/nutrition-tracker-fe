@@ -82,7 +82,7 @@ function App() {
             onClick={handleGetProducts}
             disabled={loading}
           >
-            {loading ? 'Loading...' : 'Get All Products'}
+            Get All Products
           </button>
         </div>
         

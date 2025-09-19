@@ -52,6 +52,7 @@ body {
   align-items: center;
   width: 100%;
   max-width: 600px;
+  justify-content: center;
 }
 
 .search-input-group {
@@ -118,6 +119,8 @@ body {
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  min-width: 180px;
+  white-space: nowrap;
 }
 
 .get-products-btn:hover:not(:disabled) {
@@ -196,6 +199,7 @@ body {
   .get-products-btn {
     padding: 14px 28px;
     font-size: 1rem;
+    min-width: 160px;
   }
   
   .App-main {
