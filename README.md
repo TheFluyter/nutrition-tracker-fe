@@ -1,46 +1,88 @@
-# Getting Started with Create React App
+# Nutrition Tracker Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React TypeScript application that displays nutritional information for products.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **Get Products Button**: Fetches products from the backend API
+- **Product Cards**: Displays detailed nutrition facts in a clean, readable format
+- **Responsive Design**: Works on desktop and mobile devices
+- **Error Handling**: Shows user-friendly error messages
+- **Loading States**: Provides feedback during API calls
 
-### `npm start`
+## Available Products
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- **Banana**: Rich in potassium (358mg) and vitamin C (8.7mg)
+- **Apple**: Good source of fiber (2.4g) and vitamin C (4.6mg)
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Getting Started
 
-### `npm test`
+### Prerequisites
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Node.js (v14 or higher)
+- Backend API running on port 8080
 
-### `npm run build`
+### Installation
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+2. Start the development server:
+   ```bash
+   npm start
+   ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+3. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-### `npm run eject`
+### Backend Integration
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+The frontend expects the backend API to be running on `http://localhost:8080` with the following endpoints:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- `GET /api/products` - Returns all products with nutrition facts
+- `GET /api/products/{id}` - Returns a specific product by ID
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Project Structure
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```
+src/
+├── components/
+│   ├── ProductCard.tsx      # Product display component
+│   └── ProductCard.css      # Product card styles
+├── services/
+│   └── api.ts              # API service for backend communication
+├── types/
+│   └── Product.ts          # TypeScript interfaces
+├── App.tsx                 # Main application component
+├── App.css                 # Global styles
+└── index.tsx              # Application entry point
+```
 
-## Learn More
+## Technologies Used
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- **React 18** - UI library
+- **TypeScript** - Type safety
+- **Axios** - HTTP client for API calls
+- **CSS3** - Styling with modern features
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## API Response Format
+
+```typescript
+interface Product {
+  id: number;
+  name: string;
+  description: string;
+  nutritionFacts: {
+    calories: number;
+    protein: number;        // grams
+    carbohydrates: number;  // grams
+    fat: number;           // grams
+    fiber: number;         // grams
+    sugar: number;         // grams
+    sodium: number;        // milligrams
+    vitaminC: number;      // milligrams
+    potassium: number;     // milligrams
+  };
+}
+```
