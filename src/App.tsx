@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Product } from './types/Product';
 import { productApi } from './services/api';
 import ProductCard from './components/ProductCard';
+import AddProductModal from './components/AddProductModal';
 import './App.css';
 
 function App() {
@@ -9,6 +10,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   const handleGetProducts = async () => {
     setLoading(true);
@@ -51,6 +53,11 @@ function App() {
     }
   };
 
+  const handleProductAdded = (newProduct: Product) => {
+    setProducts(prevProducts => [...prevProducts, newProduct].sort((a, b) => a.name.localeCompare(b.name)));
+    setError(null);
+  };
+
   return (
     <div className="App">
       <header className="App-header">
@@ -77,13 +84,23 @@ function App() {
             </button>
           </div>
           
-          <button 
-            className="get-products-btn"
-            onClick={handleGetProducts}
-            disabled={loading}
-          >
-            Get All Products
-          </button>
+          <div className="action-buttons">
+            <button 
+              className="add-product-btn"
+              onClick={() => setIsAddModalOpen(true)}
+              disabled={loading}
+            >
+              + Add Product
+            </button>
+            
+            <button 
+              className="get-products-btn"
+              onClick={handleGetProducts}
+              disabled={loading}
+            >
+              Get All Products
+            </button>
+          </div>
         </div>
         
         {error && (
@@ -103,6 +120,12 @@ function App() {
           </div>
         )}
       </main>
+
+      <AddProductModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onProductAdded={handleProductAdded}
+      />
     </div>
   );
 }

@@ -62,6 +62,13 @@ body {
   max-width: 400px;
 }
 
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
 .search-input {
   flex: 1;
   padding: 14px 20px;
@@ -129,6 +136,32 @@ body {
 }
 
 .get-products-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.add-product-btn {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+  min-width: 160px;
+  white-space: nowrap;
+}
+
+.add-product-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(245, 158, 11, 0.6);
+}
+
+.add-product-btn:disabled {
   opacity: 0.7;
   cursor: not-allowed;
   transform: none;

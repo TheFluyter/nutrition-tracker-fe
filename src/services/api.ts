@@ -25,6 +25,11 @@ export const productApi = {
     const response = await api.get<Product[]>(`/products/search?name=${encodeURIComponent(name)}`);
     return response.data;
   },
+
+  createProduct: async (product: Omit<Product, 'id'>): Promise<Product> => {
+    const response = await api.post<Product>('/products', product);
+    return response.data;
+  },
 };
 
 export default api;
