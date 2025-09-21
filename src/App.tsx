@@ -3,6 +3,7 @@ import { Product } from './types/Product';
 import { productApi } from './services/api';
 import ProductCard from './components/ProductCard';
 import AddProductModal from './components/AddProductModal';
+import EditProductModal from './components/EditProductModal';
 import './App.css';
 
 function App() {
@@ -11,6 +12,8 @@ function App() {
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
   const handleGetProducts = async () => {
     setLoading(true);
@@ -55,6 +58,20 @@ function App() {
 
   const handleProductAdded = (newProduct: Product) => {
     setProducts(prevProducts => [...prevProducts, newProduct].sort((a, b) => a.name.localeCompare(b.name)));
+    setError(null);
+  };
+
+  const handleEditProduct = (product: Product) => {
+    setEditingProduct(product);
+    setIsEditModalOpen(true);
+  };
+
+  const handleProductUpdated = (updatedProduct: Product) => {
+    setProducts(prevProducts => 
+      prevProducts
+        .map(p => p.id === updatedProduct.id ? updatedProduct : p)
+        .sort((a, b) => a.name.localeCompare(b.name))
+    );
     setError(null);
   };
 
@@ -115,7 +132,11 @@ function App() {
           <div className="products-container">
             <h2 className="products-title">Available Products</h2>
             {products.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard 
+                key={product.id} 
+                product={product} 
+                onEdit={handleEditProduct}
+              />
             ))}
           </div>
         )}
@@ -125,6 +146,16 @@ function App() {
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
         onProductAdded={handleProductAdded}
+      />
+
+      <EditProductModal
+        isOpen={isEditModalOpen}
+        onClose={() => {
+          setIsEditModalOpen(false);
+          setEditingProduct(null);
+        }}
+        onProductUpdated={handleProductUpdated}
+        product={editingProduct}
       />
     </div>
   );

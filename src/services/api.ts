@@ -30,6 +30,11 @@ export const productApi = {
     const response = await api.post<Product>('/products', product);
     return response.data;
   },
+
+  updateProduct: async (id: number, product: Omit<Product, 'id'>): Promise<Product> => {
+    const response = await api.put<Product>(`/products/${id}`, product);
+    return response.data;
+  },
 };
 
 export default api;

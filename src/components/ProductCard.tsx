@@ -4,15 +4,25 @@ import './ProductCard.css';
 
 interface ProductCardProps {
   product: Product;
+  onEdit: (product: Product) => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product, onEdit }) => {
   const { name, description, nutritionFacts } = product;
 
   return (
     <div className="product-card">
       <div className="product-header">
-        <h2 className="product-name">{name}</h2>
+        <div className="product-title-section">
+          <h2 className="product-name">{name}</h2>
+          <button 
+            className="edit-button"
+            onClick={() => onEdit(product)}
+            title="Edit product"
+          >
+            ✏️
+          </button>
+        </div>
         <p className="product-description">{description}</p>
       </div>
       
