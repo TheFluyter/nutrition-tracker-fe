@@ -17,6 +17,8 @@ function App() {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
   const [viewingProduct, setViewingProduct] = useState<Product | null>(null);
+  const [sortBy, setSortBy] = useState<'name' | 'calories' | 'protein' | 'carbohydrates' | 'fat'>('name');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
   const handleGetProducts = async () => {
     setLoading(true);
@@ -78,10 +80,47 @@ function App() {
     setProducts(prevProducts => 
       prevProducts
         .map(p => p.id === updatedProduct.id ? updatedProduct : p)
-        .sort((a, b) => a.name.localeCompare(b.name))
+        .sort(sortProducts)
     );
     setError(null);
   };
+
+  const sortProducts = (a: Product, b: Product): number => {
+    let comparison = 0;
+    
+    switch (sortBy) {
+      case 'name':
+        comparison = a.name.localeCompare(b.name);
+        break;
+      case 'calories':
+        comparison = a.nutritionFacts.calories - b.nutritionFacts.calories;
+        break;
+      case 'protein':
+        comparison = a.nutritionFacts.protein - b.nutritionFacts.protein;
+        break;
+      case 'carbohydrates':
+        comparison = a.nutritionFacts.carbohydrates - b.nutritionFacts.carbohydrates;
+        break;
+      case 'fat':
+        comparison = a.nutritionFacts.fat - b.nutritionFacts.fat;
+        break;
+      default:
+        comparison = a.name.localeCompare(b.name);
+    }
+    
+    return sortOrder === 'asc' ? comparison : -comparison;
+  };
+
+  const handleSort = (criteria: 'name' | 'calories' | 'protein' | 'carbohydrates' | 'fat') => {
+    if (sortBy === criteria) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortBy(criteria);
+      setSortOrder('asc');
+    }
+  };
+
+  const sortedProducts = [...products].sort(sortProducts);
 
   return (
     <div className="App">
@@ -136,10 +175,47 @@ function App() {
       </header>
       
       <main className="App-main">
-        {products.length > 0 && (
+        {sortedProducts.length > 0 && (
           <div className="products-container">
-            <h2 className="products-title">Available Products</h2>
-            {products.map((product) => (
+            <div className="products-header">
+              <h2 className="products-title">Available Products</h2>
+              <div className="sort-controls">
+                <span className="sort-label">Sort by:</span>
+                <div className="sort-buttons">
+                  <button 
+                    className={`sort-button ${sortBy === 'name' ? 'active' : ''}`}
+                    onClick={() => handleSort('name')}
+                  >
+                    Name {sortBy === 'name' && (sortOrder === 'asc' ? '↑' : '↓')}
+                  </button>
+                  <button 
+                    className={`sort-button ${sortBy === 'calories' ? 'active' : ''}`}
+                    onClick={() => handleSort('calories')}
+                  >
+                    Calories {sortBy === 'calories' && (sortOrder === 'asc' ? '↑' : '↓')}
+                  </button>
+                  <button 
+                    className={`sort-button ${sortBy === 'protein' ? 'active' : ''}`}
+                    onClick={() => handleSort('protein')}
+                  >
+                    Protein {sortBy === 'protein' && (sortOrder === 'asc' ? '↑' : '↓')}
+                  </button>
+                  <button 
+                    className={`sort-button ${sortBy === 'carbohydrates' ? 'active' : ''}`}
+                    onClick={() => handleSort('carbohydrates')}
+                  >
+                    Carbs {sortBy === 'carbohydrates' && (sortOrder === 'asc' ? '↑' : '↓')}
+                  </button>
+                  <button 
+                    className={`sort-button ${sortBy === 'fat' ? 'active' : ''}`}
+                    onClick={() => handleSort('fat')}
+                  >
+                    Fat {sortBy === 'fat' && (sortOrder === 'asc' ? '↑' : '↓')}
+                  </button>
+                </div>
+              </div>
+            </div>
+            {sortedProducts.map((product) => (
               <ProductCard 
                 key={product.id} 
                 product={product} 
