@@ -50,16 +50,49 @@ function App() {
       return;
     }
 
+    // Create updated filters with the new search term
+    const updatedFilters = { ...activeFilters, searchTerm: searchTerm.trim() };
+    
+    // Update active filters state
+    setActiveFilters(updatedFilters);
+    
+    // Apply all filters with the updated filters
+    await applyAllFilters(updatedFilters);
+  };
+
+  const applyAllFilters = async (filtersToApply?: typeof activeFilters) => {
     setLoading(true);
     setError(null);
     
     try {
-      const searchedProducts = await productApi.searchProducts(searchTerm);
-      setProducts(searchedProducts);
-      setActiveFilters({ searchTerm: searchTerm.trim() }); // Track search filter
+      let filteredProducts: Product[] = [];
+      
+      // Use provided filters or current active filters
+      const filters = filtersToApply || activeFilters;
+      
+      // Start with all products
+      const allProducts = await productApi.getAllProducts();
+      filteredProducts = allProducts;
+      
+      // Apply search filter if active
+      if (filters.searchTerm) {
+        filteredProducts = filteredProducts.filter(product => 
+          product.name.toLowerCase().includes(filters.searchTerm!.toLowerCase())
+        );
+      }
+      
+      // Apply protein range filter if active
+      if (filters.proteinRange) {
+        const { min, max } = filters.proteinRange;
+        filteredProducts = filteredProducts.filter(product => 
+          product.nutritionFacts.protein >= min && product.nutritionFacts.protein <= max
+        );
+      }
+      
+      setProducts(filteredProducts);
     } catch (err) {
-      setError('Failed to search products. Make sure the backend is running on port 8080.');
-      console.error('Error searching products:', err);
+      setError('Failed to apply filters. Make sure the backend is running on port 8080.');
+      console.error('Error applying filters:', err);
     } finally {
       setLoading(false);
     }
@@ -71,22 +104,20 @@ function App() {
       return;
     }
 
-    setLoading(true);
-    setError(null);
+    const min = minProtein ? parseFloat(minProtein) : 0;
+    const max = maxProtein ? parseFloat(maxProtein) : 999999;
     
-    try {
-      const min = minProtein ? parseFloat(minProtein) : 0;
-      const max = maxProtein ? parseFloat(maxProtein) : 999999;
-      const filteredProducts = await productApi.searchProductsByProteinRange(min, max);
-      setProducts(filteredProducts);
-      setActiveFilters(prev => ({ ...prev, proteinRange: { min, max } })); // Track protein filter
-      setIsAdvancedSearchModalOpen(false); // Close modal after successful search
-    } catch (err) {
-      setError('Failed to filter products by protein range. Make sure the backend is running on port 8080.');
-      console.error('Error filtering products by protein:', err);
-    } finally {
-      setLoading(false);
-    }
+    // Create updated filters with the new protein range
+    const updatedFilters = { ...activeFilters, proteinRange: { min, max } };
+    
+    // Update active filters state
+    setActiveFilters(updatedFilters);
+    
+    // Close modal
+    setIsAdvancedSearchModalOpen(false);
+    
+    // Apply all filters with the updated filters
+    await applyAllFilters(updatedFilters);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -155,26 +186,22 @@ function App() {
   };
 
   const removeFilter = async (filterType: 'searchTerm' | 'proteinRange') => {
+    let updatedFilters = { ...activeFilters };
+    
     if (filterType === 'searchTerm') {
       setSearchTerm('');
-      setActiveFilters(prev => {
-        const newFilters = { ...prev };
-        delete newFilters.searchTerm;
-        return newFilters;
-      });
-      // Re-fetch all products when search filter is removed
-      await handleGetProducts();
+      delete updatedFilters.searchTerm;
     } else if (filterType === 'proteinRange') {
       setMinProtein('');
       setMaxProtein('');
-      setActiveFilters(prev => {
-        const newFilters = { ...prev };
-        delete newFilters.proteinRange;
-        return newFilters;
-      });
-      // Re-fetch all products when protein filter is removed
-      await handleGetProducts();
+      delete updatedFilters.proteinRange;
     }
+    
+    // Update active filters state
+    setActiveFilters(updatedFilters);
+    
+    // Apply remaining filters after removing one
+    await applyAllFilters(updatedFilters);
   };
 
   const clearAllFilters = async () => {
