@@ -4,6 +4,7 @@ import { productApi } from './services/api';
 import ProductCard from './components/ProductCard';
 import AddProductModal from './components/AddProductModal';
 import EditProductModal from './components/EditProductModal';
+import ProductDetailsModal from './components/ProductDetailsModal';
 import './App.css';
 
 function App() {
@@ -14,6 +15,8 @@ function App() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  const [viewingProduct, setViewingProduct] = useState<Product | null>(null);
 
   const handleGetProducts = async () => {
     setLoading(true);
@@ -64,6 +67,11 @@ function App() {
   const handleEditProduct = (product: Product) => {
     setEditingProduct(product);
     setIsEditModalOpen(true);
+  };
+
+  const handleViewDetails = (product: Product) => {
+    setViewingProduct(product);
+    setIsDetailsModalOpen(true);
   };
 
   const handleProductUpdated = (updatedProduct: Product) => {
@@ -136,6 +144,7 @@ function App() {
                 key={product.id} 
                 product={product} 
                 onEdit={handleEditProduct}
+                onViewDetails={handleViewDetails}
               />
             ))}
           </div>
@@ -156,6 +165,15 @@ function App() {
         }}
         onProductUpdated={handleProductUpdated}
         product={editingProduct}
+      />
+
+      <ProductDetailsModal
+        isOpen={isDetailsModalOpen}
+        onClose={() => {
+          setIsDetailsModalOpen(false);
+          setViewingProduct(null);
+        }}
+        product={viewingProduct}
       />
     </div>
   );

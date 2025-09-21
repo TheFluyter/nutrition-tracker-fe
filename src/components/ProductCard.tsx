@@ -5,75 +5,57 @@ import './ProductCard.css';
 interface ProductCardProps {
   product: Product;
   onEdit: (product: Product) => void;
+  onViewDetails: (product: Product) => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, onEdit }) => {
-  const { name, description, nutritionFacts } = product;
+const ProductCard: React.FC<ProductCardProps> = ({ product, onEdit, onViewDetails }) => {
+  const { name, nutritionFacts } = product;
 
   return (
-    <div className="product-card">
-      <div className="product-header">
-        <div className="product-title-section">
-          <h2 className="product-name">{name}</h2>
-          <button 
-            className="edit-button"
-            onClick={() => onEdit(product)}
-            title="Edit product"
-          >
-            ✏️
-          </button>
+    <div 
+      className="product-card clickable"
+      onClick={() => onViewDetails(product)}
+      title="Click to view details"
+    >
+      <div className="product-content">
+        <div className="product-info">
+          <h2 className="product-name">
+            {name}
+          </h2>
         </div>
-        <p className="product-description">{description}</p>
-      </div>
-      
-      <div className="nutrition-section">
-        <h3 className="nutrition-title">Nutrition Facts</h3>
-        <div className="nutrition-grid">
+        
+        <div className="nutrition-overview">
           <div className="nutrition-item primary">
-            <span className="nutrition-label">Calories</span>
             <span className="nutrition-value">{nutritionFacts.calories}</span>
+            <span className="nutrition-label">cal</span>
           </div>
           
           <div className="nutrition-item">
-            <span className="nutrition-label">Protein</span>
             <span className="nutrition-value">{nutritionFacts.protein}g</span>
+            <span className="nutrition-label">protein</span>
           </div>
           
           <div className="nutrition-item">
-            <span className="nutrition-label">Carbohydrates</span>
             <span className="nutrition-value">{nutritionFacts.carbohydrates}g</span>
+            <span className="nutrition-label">carbs</span>
           </div>
           
           <div className="nutrition-item">
-            <span className="nutrition-label">Fat</span>
             <span className="nutrition-value">{nutritionFacts.fat}g</span>
-          </div>
-          
-          <div className="nutrition-item">
-            <span className="nutrition-label">Fiber</span>
-            <span className="nutrition-value">{nutritionFacts.fiber}g</span>
-          </div>
-          
-          <div className="nutrition-item">
-            <span className="nutrition-label">Sugar</span>
-            <span className="nutrition-value">{nutritionFacts.sugar}g</span>
-          </div>
-          
-          <div className="nutrition-item">
-            <span className="nutrition-label">Sodium</span>
-            <span className="nutrition-value">{nutritionFacts.sodium}mg</span>
-          </div>
-          
-          <div className="nutrition-item">
-            <span className="nutrition-label">Vitamin C</span>
-            <span className="nutrition-value">{nutritionFacts.vitaminC}mg</span>
-          </div>
-          
-          <div className="nutrition-item">
-            <span className="nutrition-label">Potassium</span>
-            <span className="nutrition-value">{nutritionFacts.potassium}mg</span>
+            <span className="nutrition-label">fat</span>
           </div>
         </div>
+        
+        <button 
+          className="edit-button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onEdit(product);
+          }}
+          title="Edit product"
+        >
+          ✏️
+        </button>
       </div>
     </div>
   );
