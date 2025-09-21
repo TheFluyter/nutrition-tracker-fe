@@ -102,7 +102,7 @@ const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                   className="search-button"
                   disabled={loading || (!minProtein && !maxProtein)}
                 >
-                  {loading ? 'Searching...' : 'Search by Protein Range'}
+                  {loading ? 'Searching...' : 'Search'}
                 </button>
               </div>
             </div>

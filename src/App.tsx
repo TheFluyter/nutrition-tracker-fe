@@ -23,10 +23,15 @@ function App() {
   const [viewingProduct, setViewingProduct] = useState<Product | null>(null);
   const [sortBy, setSortBy] = useState<'name' | 'calories' | 'protein' | 'carbohydrates' | 'fat'>('name');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [activeFilters, setActiveFilters] = useState<{
+    searchTerm?: string;
+    proteinRange?: { min: number; max: number };
+  }>({});
 
   const handleGetProducts = async () => {
     setLoading(true);
     setError(null);
+    setActiveFilters({}); // Clear all filters when getting all products
     
     try {
       const fetchedProducts = await productApi.getAllProducts();
@@ -51,6 +56,7 @@ function App() {
     try {
       const searchedProducts = await productApi.searchProducts(searchTerm);
       setProducts(searchedProducts);
+      setActiveFilters({ searchTerm: searchTerm.trim() }); // Track search filter
     } catch (err) {
       setError('Failed to search products. Make sure the backend is running on port 8080.');
       console.error('Error searching products:', err);
@@ -73,6 +79,8 @@ function App() {
       const max = maxProtein ? parseFloat(maxProtein) : 999999;
       const filteredProducts = await productApi.searchProductsByProteinRange(min, max);
       setProducts(filteredProducts);
+      setActiveFilters(prev => ({ ...prev, proteinRange: { min, max } })); // Track protein filter
+      setIsAdvancedSearchModalOpen(false); // Close modal after successful search
     } catch (err) {
       setError('Failed to filter products by protein range. Make sure the backend is running on port 8080.');
       console.error('Error filtering products by protein:', err);
@@ -146,6 +154,38 @@ function App() {
     }
   };
 
+  const removeFilter = async (filterType: 'searchTerm' | 'proteinRange') => {
+    if (filterType === 'searchTerm') {
+      setSearchTerm('');
+      setActiveFilters(prev => {
+        const newFilters = { ...prev };
+        delete newFilters.searchTerm;
+        return newFilters;
+      });
+      // Re-fetch all products when search filter is removed
+      await handleGetProducts();
+    } else if (filterType === 'proteinRange') {
+      setMinProtein('');
+      setMaxProtein('');
+      setActiveFilters(prev => {
+        const newFilters = { ...prev };
+        delete newFilters.proteinRange;
+        return newFilters;
+      });
+      // Re-fetch all products when protein filter is removed
+      await handleGetProducts();
+    }
+  };
+
+  const clearAllFilters = async () => {
+    setSearchTerm('');
+    setMinProtein('');
+    setMaxProtein('');
+    setActiveFilters({});
+    // Re-fetch all products when all filters are cleared
+    await handleGetProducts();
+  };
+
   const sortedProducts = [...products].sort(sortProducts);
 
   return (
@@ -208,6 +248,54 @@ function App() {
       </header>
       
       <main className="App-main">
+        {/* Active Filters Display */}
+        {Object.keys(activeFilters).length > 0 && (
+          <div className="active-filters-container">
+            <div className="active-filters-header">
+              <h3 className="active-filters-title">Active Filters</h3>
+              <button 
+                className="clear-all-filters-btn"
+                onClick={clearAllFilters}
+                disabled={loading}
+              >
+                Clear All
+              </button>
+            </div>
+            <div className="active-filters-list">
+              {activeFilters.searchTerm && (
+                <div className="filter-chip">
+                  <span className="filter-label">Search:</span>
+                  <span className="filter-value">"{activeFilters.searchTerm}"</span>
+                  <button 
+                    className="remove-filter-btn"
+                    onClick={() => removeFilter('searchTerm')}
+                    disabled={loading}
+                    title="Remove search filter"
+                  >
+                    ×
+                  </button>
+                </div>
+              )}
+              {activeFilters.proteinRange && (
+                <div className="filter-chip">
+                  <span className="filter-label">Protein:</span>
+                  <span className="filter-value">
+                    {activeFilters.proteinRange.min > 0 ? `${activeFilters.proteinRange.min}g` : '0g'} - {activeFilters.proteinRange.max < 999999 ? `${activeFilters.proteinRange.max}g` : '∞'}
+                  </span>
+                  <button 
+                    className="remove-filter-btn"
+                    onClick={() => removeFilter('proteinRange')}
+                    disabled={loading}
+                    title="Remove protein filter"
+                  >
+                    ×
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
         {sortedProducts.length > 0 && (
           <div className="products-container">
             <div className="products-header">
@@ -289,8 +377,8 @@ function App() {
         isOpen={isAdvancedSearchModalOpen}
         onClose={() => {
           setIsAdvancedSearchModalOpen(false);
-          setMinProtein('');
-          setMaxProtein('');
+          // Don't clear the protein values or remove the filter when modal is closed
+          // The filter should persist until explicitly removed by the user
         }}
         onSearch={handleProteinRangeSearch}
         minProtein={minProtein}
