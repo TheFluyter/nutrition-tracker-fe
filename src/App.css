@@ -49,47 +49,59 @@ body {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  align-items: center;
+  align-items: stretch;
   width: 100%;
-  max-width: 800px;
+  max-width: 1200px;
+  margin: 0 auto;
   justify-content: center;
 }
 
-.search-section {
+.buttons-row {
   display: flex;
-  flex-direction: column;
-  gap: 20px;
+  justify-content: flex-start;
+  align-items: center;
   width: 100%;
+  gap: 15px;
+  flex-wrap: wrap;
 }
 
 .search-input-group {
   display: flex;
-  gap: 12px;
-  width: 100%;
-  max-width: 600px;
-  align-self: center;
-  flex-wrap: wrap;
-  justify-content: center;
+  gap: 0;
+  width: auto;
+  max-width: 500px;
+  align-items: center;
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 50px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s ease;
+}
+
+.search-input-group:focus-within {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .advanced-search-btn {
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, #10b981, #059669);
   border: none;
   color: white;
-  padding: 12px 24px;
+  padding: 12px 20px;
   border-radius: 50px;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
   white-space: nowrap;
+  min-width: 120px;
 }
 
 .advanced-search-btn:hover:not(:disabled) {
-  opacity: 0.9;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.6);
 }
 
 .advanced-search-btn:disabled {
@@ -101,30 +113,26 @@ body {
 
 .action-buttons {
   display: flex;
-  gap: 12px;
-  justify-content: center;
+  gap: 10px;
+  justify-content: flex-end;
   flex-wrap: wrap;
+  width: 100%;
 }
 
 .search-input {
   flex: 1;
   padding: 14px 20px;
   font-size: 1rem;
-  border: 2px solid #e5e7eb;
-  border-radius: 50px;
+  border: none;
   outline: none;
-  transition: all 0.3s ease;
-  background: white;
-}
-
-.search-input:focus {
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  background: transparent;
+  min-width: 200px;
 }
 
 .search-input:disabled {
-  background: #f3f4f6;
+  background: transparent;
   cursor: not-allowed;
+  opacity: 0.6;
 }
 
 .search-btn {
@@ -134,11 +142,11 @@ body {
   padding: 14px 24px;
   font-size: 1rem;
   font-weight: 600;
-  border-radius: 50px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
   white-space: nowrap;
+  min-width: 80px;
+  border-radius: 0 50px 50px 0;
 }
 
 .search-btn:hover:not(:disabled) {
@@ -156,14 +164,14 @@ body {
   background: linear-gradient(135deg, #667eea, #764ba2);
   color: white;
   border: none;
-  padding: 16px 32px;
-  font-size: 1.1rem;
+  padding: 12px 20px;
+  font-size: 0.95rem;
   font-weight: 600;
   border-radius: 50px;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-  min-width: 180px;
+  min-width: 140px;
   white-space: nowrap;
 }
 
@@ -182,14 +190,14 @@ body {
   background: linear-gradient(135deg, #f59e0b, #d97706);
   color: white;
   border: none;
-  padding: 16px 32px;
-  font-size: 1.1rem;
+  padding: 12px 20px;
+  font-size: 0.95rem;
   font-weight: 600;
   border-radius: 50px;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
-  min-width: 160px;
+  min-width: 120px;
   white-space: nowrap;
 }
 
@@ -444,19 +452,26 @@ body {
     padding: 6px 10px;
   }
   
-  .search-section {
+  .buttons-row {
+    flex-direction: column;
     gap: 12px;
   }
   
   .search-input-group {
-    max-width: 350px;
+    max-width: 100%;
+    width: 100%;
   }
   
+  .search-input {
+    min-width: 150px;
+  }
   
-  
-  .advanced-search-btn {
+  .advanced-search-btn,
+  .add-product-btn,
+  .get-products-btn {
     font-size: 0.9rem;
-    padding: 10px 20px;
+    padding: 12px 20px;
+    width: 100%;
   }
   
   .App-subtitle {
@@ -465,26 +480,7 @@ body {
   
   .search-container {
     max-width: 100%;
-  }
-  
-  .search-input-group {
-    flex-direction: column;
-    max-width: 100%;
-  }
-  
-  .search-input {
-    width: 100%;
-  }
-  
-  .search-btn {
-    width: 100%;
-    padding: 16px 24px;
-  }
-  
-  .get-products-btn {
-    padding: 14px 28px;
-    font-size: 1rem;
-    min-width: 160px;
+    margin: 0 auto;
   }
   
   .App-main {

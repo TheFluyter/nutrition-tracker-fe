@@ -221,51 +221,52 @@ function App() {
         <h1 className="App-title">Nutrition Tracker</h1>
         <p className="App-subtitle">Discover the nutritional value of your favorite foods</p>
         
-        <div className="search-container">
-          <div className="search-input-group">
-            <input
-              type="text"
-              className="search-input"
-              placeholder="Search products by name..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              onKeyPress={handleKeyPress}
-              disabled={loading}
-            />
-            <button 
-              className="search-btn"
-              onClick={handleSearchProducts}
-              disabled={loading || !searchTerm.trim()}
-            >
-              Search
-            </button>
-            <button 
-              className="search-btn advanced-search-btn"
-              onClick={() => setIsAdvancedSearchModalOpen(true)}
-              disabled={loading}
-            >
-              Advanced Search
-            </button>
-          </div>
-          
-          <div className="action-buttons">
-            <button 
-              className="add-product-btn"
-              onClick={() => setIsAddModalOpen(true)}
-              disabled={loading}
-            >
-              + Add Product
-            </button>
-            
-            <button 
-              className="get-products-btn"
-              onClick={handleGetProducts}
-              disabled={loading}
-            >
-              Get All Products
-            </button>
-          </div>
-        </div>
+            <div className="search-container">
+              <div className="buttons-row">
+                <div className="search-input-group">
+                  <input
+                    type="text"
+                    className="search-input"
+                    placeholder="Search products by name..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                    disabled={loading}
+                  />
+                  <button
+                    className="search-btn"
+                    onClick={handleSearchProducts}
+                    disabled={loading || !searchTerm.trim()}
+                  >
+                    Search
+                  </button>
+                </div>
+                
+                <button
+                  className="advanced-search-btn"
+                  onClick={() => setIsAdvancedSearchModalOpen(true)}
+                  disabled={loading}
+                >
+                  Advanced Search
+                </button>
+                
+                <button
+                  className="add-product-btn"
+                  onClick={() => setIsAddModalOpen(true)}
+                  disabled={loading}
+                >
+                  + Add Product
+                </button>
+                
+                <button
+                  className="get-products-btn"
+                  onClick={handleGetProducts}
+                  disabled={loading}
+                >
+                  Get All Products
+                </button>
+              </div>
+            </div>
         
         {error && (
           <div className="error-message">
