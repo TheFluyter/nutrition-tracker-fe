@@ -1,0 +1,264 @@
+/* Reuses base modal styles from AddProductModal.css */
+@import './AddProductModal.css';
+
+.advanced-search-modal {
+  max-width: 600px;
+  padding: 0; /* Remove padding from modal content */
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px 40px 20px 40px; /* Add padding to header */
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 20px;
+}
+
+.modal-close-button {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+
+.modal-close-button:hover:not(:disabled) {
+  background: #f3f4f6;
+  color: #374151;
+  transform: scale(1.1);
+}
+
+.modal-close-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.advanced-search-form {
+  padding: 0 40px 40px 40px; /* Add padding to form content */
+}
+
+.search-section {
+  margin-bottom: 30px;
+}
+
+.section-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 12px;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 12px;
+}
+
+.section-description {
+  font-size: 1rem;
+  color: #6b7280;
+  margin-bottom: 30px;
+  line-height: 1.6;
+  padding: 0 10px;
+}
+
+.protein-range-group {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  padding: 20px;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.range-inputs {
+  display: flex;
+  align-items: end;
+  gap: 24px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+  min-width: 140px;
+  max-width: 200px;
+}
+
+.input-label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 4px;
+}
+
+.range-input {
+  width: 100%;
+  padding: 16px 20px;
+  font-size: 1.1rem;
+  border: 2px solid #d1d5db;
+  border-radius: 10px;
+  outline: none;
+  transition: all 0.3s ease;
+  background: #ffffff;
+  color: #1f2937;
+  text-align: center;
+  font-weight: 500;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.range-input::placeholder {
+  color: #9ca3af;
+  font-weight: 400;
+}
+
+.range-input:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.range-input:disabled {
+  background: #f3f4f6;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.range-separator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 15px;
+  margin-bottom: 8px;
+}
+
+.range-separator span {
+  color: #6b7280;
+  font-size: 1.1rem;
+  font-weight: 600;
+  background: #ffffff;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 2px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.search-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.cancel-button,
+.search-button {
+  padding: 16px 32px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 140px;
+}
+
+.cancel-button {
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid #d1d5db;
+}
+
+.cancel-button:hover:not(:disabled) {
+  background: #e5e7eb;
+  border-color: #9ca3af;
+}
+
+.search-button {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.search-button:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.cancel-button:disabled,
+.search-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+  .advanced-search-modal {
+    max-width: 95%;
+    margin: 20px;
+  }
+  
+  .modal-header {
+    padding: 20px 20px 15px 20px;
+  }
+  
+  .advanced-search-form {
+    padding: 0 20px 20px 20px;
+  }
+  
+  .section-title {
+    font-size: 1.2rem;
+  }
+  
+  .section-description {
+    font-size: 0.9rem;
+    padding: 0 5px;
+  }
+  
+  .protein-range-group {
+    padding: 15px;
+    gap: 20px;
+  }
+  
+  .range-inputs {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .input-group {
+    min-width: 100%;
+    max-width: 100%;
+  }
+  
+  .range-separator {
+    order: 1;
+    margin: 0;
+  }
+  
+  .range-separator span {
+    font-size: 1rem;
+    padding: 10px 14px;
+  }
+  
+  .search-actions {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .cancel-button,
+  .search-button {
+    width: 100%;
+    padding: 14px 24px;
+    font-size: 1rem;
+  }
+}

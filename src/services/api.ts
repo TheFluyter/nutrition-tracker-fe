@@ -26,6 +26,11 @@ export const productApi = {
     return response.data;
   },
 
+  searchProductsByProteinRange: async (minProtein: number, maxProtein: number): Promise<Product[]> => {
+    const response = await api.get<Product[]>(`/products/protein?min=${minProtein}&max=${maxProtein}`);
+    return response.data;
+  },
+
   createProduct: async (product: Omit<Product, 'id'>): Promise<Product> => {
     const response = await api.post<Product>('/products', product);
     return response.data;

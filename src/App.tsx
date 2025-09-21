@@ -5,6 +5,7 @@ import ProductCard from './components/ProductCard';
 import AddProductModal from './components/AddProductModal';
 import EditProductModal from './components/EditProductModal';
 import ProductDetailsModal from './components/ProductDetailsModal';
+import AdvancedSearchModal from './components/AdvancedSearchModal';
 import './App.css';
 
 function App() {
@@ -12,6 +13,9 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [minProtein, setMinProtein] = useState('');
+  const [maxProtein, setMaxProtein] = useState('');
+  const [isAdvancedSearchModalOpen, setIsAdvancedSearchModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
@@ -50,6 +54,28 @@ function App() {
     } catch (err) {
       setError('Failed to search products. Make sure the backend is running on port 8080.');
       console.error('Error searching products:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleProteinRangeSearch = async () => {
+    if (!minProtein && !maxProtein) {
+      setError('Please enter at least one protein value');
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const min = minProtein ? parseFloat(minProtein) : 0;
+      const max = maxProtein ? parseFloat(maxProtein) : 999999;
+      const filteredProducts = await productApi.searchProductsByProteinRange(min, max);
+      setProducts(filteredProducts);
+    } catch (err) {
+      setError('Failed to filter products by protein range. Make sure the backend is running on port 8080.');
+      console.error('Error filtering products by protein:', err);
     } finally {
       setLoading(false);
     }
@@ -133,7 +159,7 @@ function App() {
             <input
               type="text"
               className="search-input"
-              placeholder="Search products..."
+              placeholder="Search products by name..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyPress={handleKeyPress}
@@ -145,6 +171,13 @@ function App() {
               disabled={loading || !searchTerm.trim()}
             >
               Search
+            </button>
+            <button 
+              className="search-btn advanced-search-btn"
+              onClick={() => setIsAdvancedSearchModalOpen(true)}
+              disabled={loading}
+            >
+              Advanced Search
             </button>
           </div>
           
@@ -250,6 +283,21 @@ function App() {
           setViewingProduct(null);
         }}
         product={viewingProduct}
+      />
+
+      <AdvancedSearchModal
+        isOpen={isAdvancedSearchModalOpen}
+        onClose={() => {
+          setIsAdvancedSearchModalOpen(false);
+          setMinProtein('');
+          setMaxProtein('');
+        }}
+        onSearch={handleProteinRangeSearch}
+        minProtein={minProtein}
+        setMinProtein={setMinProtein}
+        maxProtein={maxProtein}
+        setMaxProtein={setMaxProtein}
+        loading={loading}
       />
     </div>
   );
